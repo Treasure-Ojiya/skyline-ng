@@ -1,0 +1,177 @@
+<main class="pt-28 bg-slate-50 min-h-screen">
+  <!-- Hero Banner -->
+  <div
+    class="relative w-full h-72 mt-4 mx-auto max-w-7xl rounded-3xl overflow-hidden shadow-lg px-4"
+  >
+    <img src="assets/imgs/flight-1.jpg" alt="Flights" class="w-full h-full object-cover" />
+    <div
+      class="absolute inset-0 rounded-3xl"
+      style="background: linear-gradient(to bottom, rgba(15, 23, 42, 0.55), rgba(15, 23, 42, 0.75))"
+    ></div>
+    <div
+      class="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-4"
+    >
+      <h1 class="text-4xl md:text-5xl font-bold text-[#fbbf24] mb-3">Available Flights</h1>
+      <p class="text-lg md:text-xl max-w-2xl text-gray-200">
+        Find and book your next journey with ease.
+      </p>
+    </div>
+  </div>
+
+  <div class="max-w-5xl mx-auto mt-10 px-4 pb-16">
+    <!-- Search -->
+    <div
+      class="mb-6 flex items-center gap-3 bg-white rounded-xl shadow-sm px-4 py-3 border border-gray-100"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="w-5 h-5 text-gray-400 flex-shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"
+        />
+      </svg>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearch()"
+        placeholder="Search by airport, city or flight number..."
+        class="flex-1 outline-none text-gray-700 placeholder-gray-400 text-sm"
+      />
+    </div>
+
+    <!-- Results count -->
+    <p class="text-sm text-gray-500 mb-4">
+      Showing <span class="font-semibold text-[#0f172a]">{{ flights.length }}</span> of
+      <span class="font-semibold text-[#0f172a]">{{ filteredFlights.length }}</span> flights
+    </p>
+
+    <!-- Flight Cards -->
+    @if (flights.length === 0) {
+      <div class="text-center py-16 text-gray-400">
+        <p class="text-5xl mb-4">✈️</p>
+        <p class="text-lg font-semibold">No flights found.</p>
+        <p class="text-sm">Try a different search term.</p>
+      </div>
+    }
+
+    <div class="grid gap-4">
+      @for (item of flights; track item.flightId) {
+        <div
+          class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 p-5 border border-gray-100"
+        >
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+            <!-- Route -->
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="text-center">
+                  <p class="text-xl font-bold text-[#0f172a]">{{ item.departureAirportCode }}</p>
+                  <p class="text-xs text-gray-500 max-w-[100px] truncate">
+                    {{ item.departureAirportName }}
+                  </p>
+                  <p class="text-sm font-semibold text-gray-700 mt-1">{{ item.departureTime }}</p>
+                </div>
+                <div class="flex-1 flex flex-col items-center">
+                  <div class="w-full flex items-center gap-1">
+                    <div class="flex-1 h-px bg-gray-300"></div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="w-5 h-5 text-[#fbbf24]"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M21 16v-2l-8-5V3.5A1.5 1.5 0 0 0 11.5 2 1.5 1.5 0 0 0 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z"
+                      />
+                    </svg>
+                    <div class="flex-1 h-px bg-gray-300"></div>
+                  </div>
+                  <p class="text-xs text-gray-400 mt-1">{{ item.flightNumber }}</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-xl font-bold text-[#0f172a]">{{ item.arrivalAirportCode }}</p>
+                  <p class="text-xs text-gray-500 max-w-[100px] truncate">
+                    {{ item.arrivalAirportName }}
+                  </p>
+                  <p class="text-sm font-semibold text-gray-700 mt-1">{{ item.arrivalTime }}</p>
+                </div>
+              </div>
+
+              <!-- Meta -->
+              <div class="flex flex-wrap gap-3 text-xs text-gray-500">
+                <span class="flex items-center gap-1">
+                  📅 {{ item.travelDate | date: 'dd MMM yyyy' }}
+                </span>
+                <span class="flex items-center gap-1"> 💺 {{ item.totalSeats }} seats </span>
+                <span class="flex items-center gap-1"> 🏢 {{ item.vendorName }} </span>
+              </div>
+            </div>
+
+            <!-- Price & CTA -->
+            <div class="flex flex-col items-end gap-2 min-w-[130px]">
+              <p class="text-2xl font-bold text-[#0f172a]">₦{{ item.price | number }}</p>
+              <p class="text-xs text-gray-400">per person</p>
+              <button
+                (click)="bookFlight(item.flightId)"
+                class="bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0f172a] font-bold py-2 px-5 rounded-lg text-sm transition-all duration-200 w-full text-center"
+              >
+                Book Now
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages > 1) {
+      <div class="flex gap-2 justify-center mt-8 items-center flex-wrap">
+        <button
+          (click)="changePage(1)"
+          [disabled]="startPage === 1"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 disabled:opacity-40"
+        >
+          ««
+        </button>
+        <button
+          (click)="changePage(startPage - 1)"
+          [disabled]="startPage === 1"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 disabled:opacity-40"
+        >
+          ‹
+        </button>
+        @for (page of visiblePages; track page) {
+          <button
+            (click)="changePage(page)"
+            [class]="
+              startPage === page ? 'bg-[#0f172a] text-white' : 'hover:bg-gray-100 text-gray-700'
+            "
+            class="px-3 py-1 border rounded-md transition-colors text-sm"
+          >
+            {{ page }}
+          </button>
+        }
+        <button
+          (click)="changePage(startPage + 1)"
+          [disabled]="startPage === totalPages"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 disabled:opacity-40"
+        >
+          ›
+        </button>
+        <button
+          (click)="changePage(totalPages)"
+          [disabled]="startPage === totalPages"
+          class="w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 disabled:opacity-40"
+        >
+          »»
+        </button>
+      </div>
+    }
+  </div>
+</main>

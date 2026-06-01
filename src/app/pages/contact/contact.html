@@ -1,0 +1,109 @@
+<main class="pt-24 bg-slate-50 min-h-screen pb-16">
+  <!-- Hero -->
+  <section class="max-w-7xl mx-auto mt-4 px-4">
+    <div class="bg-[#0f172a] rounded-3xl p-12 text-center text-white">
+      <h1 class="text-4xl md:text-5xl font-bold text-[#fbbf24] mb-3">Get in Touch</h1>
+      <p class="text-gray-300 text-lg max-w-xl mx-auto">
+        Have a question, feedback, or issue? We're here to help. Reach out to the Skyline team
+        anytime.
+      </p>
+    </div>
+  </section>
+
+  <section class="max-w-5xl mx-auto mt-12 px-4 grid md:grid-cols-2 gap-10">
+    <!-- Contact Info -->
+    <div class="flex flex-col gap-6">
+      <h2 class="text-2xl font-bold text-[#0f172a]">Contact Information</h2>
+      <p class="text-gray-500 text-sm">We typically respond within 24 hours on business days.</p>
+
+      @for (info of contactInfo; track info.label) {
+        <div
+          class="flex items-start gap-4 bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all"
+        >
+          <div
+            class="w-12 h-12 bg-[#0f172a] rounded-xl flex items-center justify-center text-[#fbbf24] text-xl flex-shrink-0"
+          >
+            {{ info.icon }}
+          </div>
+          <div>
+            <p class="font-semibold text-[#0f172a]">{{ info.label }}</p>
+            <p class="text-gray-500 text-sm">{{ info.value }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Contact Form -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+      <h2 class="text-xl font-bold text-[#0f172a] mb-6">Send a Message</h2>
+
+      @if (submitted) {
+        <div class="text-center py-10">
+          <div class="text-5xl mb-4">✅</div>
+          <h3 class="text-lg font-bold text-[#0f172a] mb-2">Message Sent!</h3>
+          <p class="text-gray-500 text-sm">
+            Thanks for reaching out. We'll get back to you shortly.
+          </p>
+          <button
+            (click)="submitted = false"
+            class="mt-6 text-[#fbbf24] font-semibold hover:underline text-sm"
+          >
+            Send another message
+          </button>
+        </div>
+      }
+
+      @if (!submitted) {
+        <div class="flex flex-col gap-4">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Your Name</label>
+            <input
+              [(ngModel)]="form.name"
+              type="text"
+              placeholder="John Doe"
+              class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+            <input
+              [(ngModel)]="form.email"
+              type="email"
+              placeholder="you@example.com"
+              class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Subject</label>
+            <input
+              [(ngModel)]="form.subject"
+              type="text"
+              placeholder="How can we help?"
+              class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Message</label>
+            <textarea
+              [(ngModel)]="form.message"
+              rows="5"
+              placeholder="Write your message here..."
+              class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24] resize-none"
+            ></textarea>
+          </div>
+
+          @if (formError) {
+            <p class="text-red-500 text-sm">⚠️ Please fill in all fields before sending.</p>
+          }
+
+          <button
+            (click)="onSubmit()"
+            class="w-full bg-[#0f172a] hover:bg-[#1e293b] text-white font-bold py-3 rounded-xl transition-all duration-200"
+          >
+            Send Message
+          </button>
+        </div>
+      }
+    </div>
+  </section>
+</main>

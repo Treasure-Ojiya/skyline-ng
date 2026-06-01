@@ -1,0 +1,127 @@
+<main class="bg-[#F9FAFB]">
+  <!-- Hero -->
+  <div
+    [ngStyle]="{
+      'background-image':
+        'linear-gradient(rgba(15,23,42,0.60), rgba(15,23,42,0.70)), url(' + backgroundImage + ')',
+      'background-size': backgroundSize,
+      'background-position': backgroundPosition,
+    }"
+    loading="lazy"
+    class="home-container relative min-h-screen bg-no-repeat flex flex-col justify-center items-center text-white rounded-b-2xl"
+  >
+    <p class="text-sm font-semibold bg-[#059669] text-white px-4 py-1 rounded-full mb-4">
+      Book Flights. Simplicity.
+    </p>
+    <h1 class="text-3xl md:text-5xl text-center font-bold mb-4 px-4">
+      Welcome to <span class="text-[#fbbf24]">Skyline</span>
+    </h1>
+    <p class="text-lg mb-8 text-center px-4 max-w-xl text-gray-200">
+      Your one-stop solution for flight booking. Explore, book, and manage your flights with ease.
+    </p>
+    <div class="flex gap-4 flex-wrap justify-center">
+      <a
+        routerLink="/application/flight"
+        class="bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0f172a] font-bold py-3 px-8 rounded-xl transition-all duration-300"
+      >
+        Book a Flight
+      </a>
+      <a
+        routerLink="/airports"
+        class="border border-white text-white hover:bg-white/10 font-semibold py-3 px-8 rounded-xl transition-all duration-300"
+      >
+        View Airports
+      </a>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <div
+    class="about-container py-20 px-6 flex flex-col md:flex-row items-center justify-center gap-16 md:gap-24 relative overflow-visible"
+  >
+    <div
+      class="about-img relative inline-block transition-transform duration-300 hover:scale-[1.04] flex-shrink-0"
+    >
+      <img
+        src="assets/imgs/woman-plane.jpg"
+        alt="Passenger looking out airplane window"
+        width="400"
+        height="400"
+        class="rounded-[30%] shadow-lg"
+        loading="lazy"
+      />
+      <img
+        src="assets/imgs/airplane-flying-clouds.jpg"
+        alt="Airplane flying through clouds"
+        width="150"
+        height="150"
+        class="rounded-full shadow-xl absolute -bottom-8 -right-10"
+        loading="lazy"
+      />
+    </div>
+
+    <div class="max-w-lg text-center md:text-left flex flex-col justify-center">
+      <h2
+        class="text-[0.8rem] font-bold mb-4 p-2 bg-[#059669] text-white rounded-full w-fit mx-auto md:mx-0"
+      >
+        About Skyline
+      </h2>
+      <p class="text-4xl font-bold mb-4 text-[#0f172a]">
+        Most <span class="text-[#fbbf24]">Reliable</span> Booking Platform
+      </p>
+      <p class="text-[0.85rem] mb-4 text-gray-600 leading-relaxed">
+        At Skyline, we are dedicated to providing you with the best flight booking experience. Our
+        platform offers a wide range of flights, ensuring you find the perfect option for your
+        travel needs.
+      </p>
+      <p class="italic text-sm text-[#0f172a] mb-4 border-l-4 border-[#059669] pl-3">
+        Trusted, Fast, and Hassle-Free
+      </p>
+
+      <div class="flex flex-col md:flex-row gap-6 mt-2">
+        <div class="border-l-4 border-[#059669] p-4 bg-white/60 rounded-md shadow-sm">
+          <h3 class="text-xl font-semibold mb-2 text-[#fbbf24]">Mission</h3>
+          <p class="text-[0.8rem] text-gray-700">
+            Simplify flight booking — making it easy, affordable, and accessible for everyone.
+          </p>
+        </div>
+        <div class="border-l-4 border-[#059669] p-4 bg-white/60 rounded-md shadow-sm">
+          <h3 class="text-xl font-semibold mb-2 text-[#fbbf24]">Vision</h3>
+          <p class="text-[0.8rem] text-gray-700">
+            To be the go-to platform for travelers worldwide, known for reliability and ease.
+          </p>
+        </div>
+      </div>
+
+      <a
+        routerLink="/about"
+        class="mt-6 text-[#fbbf24] font-bold hover:underline hover:underline-offset-8 hover:decoration-2 transition-all duration-300 w-fit mx-auto md:mx-0"
+      >
+        Learn More &rarr;
+      </a>
+    </div>
+  </div>
+
+  <!-- Destinations Slider -->
+  <div class="destinations pb-16">
+    <h2 class="text-4xl font-bold mb-2 text-[#0f172a] text-center">Favorite Destinations</h2>
+    <p class="text-center text-gray-500 text-sm mb-6">
+      From Lagos to the world — explore where Skyline can take you.
+    </p>
+    <app-slider></app-slider>
+  </div>
+
+  <!-- CTA Banner -->
+  <div class="bg-[#0f172a] mx-4 md:mx-12 rounded-3xl py-14 px-6 text-center mb-16">
+    <h2 class="text-3xl font-bold text-white mb-3">Ready to take off?</h2>
+    <p class="text-gray-400 mb-6 max-w-md mx-auto text-sm">
+      Browse available flights and book your next adventure in minutes.
+    </p>
+    <a
+      routerLink="/flights"
+      class="bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0f172a] font-bold py-3 px-10 rounded-xl transition-all duration-300 inline-block"
+    >
+      Explore Flights
+    </a>
+  </div>
+</main>

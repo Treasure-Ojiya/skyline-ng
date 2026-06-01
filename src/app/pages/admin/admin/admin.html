@@ -1,0 +1,288 @@
+<main class="pt-24 bg-slate-100 min-h-screen pb-16 px-4">
+
+  <!-- PASSWORD GATE -->
+  @if (!isAuthenticated) {
+    <div class="max-w-sm mx-auto mt-20 bg-white rounded-2xl shadow-lg p-8 text-center">
+      <div class="text-5xl mb-4">🔐</div>
+      <h2 class="text-2xl font-bold text-[#0f172a] mb-2">Admin Panel</h2>
+      <p class="text-gray-500 text-sm mb-6">Enter the admin password to continue.</p>
+      <input
+        [(ngModel)]="adminPassword"
+        type="password"
+        placeholder="Admin password"
+        (keydown.enter)="login()"
+        class="w-full border border-gray-300 rounded-lg py-2 px-3 mb-3 text-sm focus:outline-none focus:border-[#fbbf24]"
+      />
+      @if (authError) {
+        <p class="text-red-500 text-sm mb-3">{{ authError }}</p>
+      }
+      <button (click)="login()"
+        class="w-full bg-[#0f172a] text-white font-bold py-2 rounded-lg hover:bg-[#1e293b] transition-all">
+        Enter
+      </button>
+    </div>
+  }
+
+  <!-- ADMIN DASHBOARD -->
+  @if (isAuthenticated) {
+    <div class="max-w-6xl mx-auto">
+
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-[#0f172a]">Admin Panel</h1>
+          <p class="text-sm text-gray-500">Manage airports and flights</p>
+        </div>
+        <button (click)="logout()"
+          class="text-sm text-red-500 border border-red-300 hover:bg-red-50 px-4 py-2 rounded-lg transition-all">
+          Logout
+        </button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex gap-2 mb-6 border-b border-gray-200">
+        <button (click)="activeTab = 'airports'"
+          [class]="activeTab === 'airports' ? 'border-b-2 border-[#fbbf24] text-[#0f172a] font-bold' : 'text-gray-400'"
+          class="py-2 px-4 text-sm transition-all">
+          🏢 Airports ({{ airports.length }})
+        </button>
+        <button (click)="activeTab = 'flights'"
+          [class]="activeTab === 'flights' ? 'border-b-2 border-[#fbbf24] text-[#0f172a] font-bold' : 'text-gray-400'"
+          class="py-2 px-4 text-sm transition-all">
+          ✈️ Flights ({{ flights.length }})
+        </button>
+      </div>
+
+      <!-- ====== AIRPORTS TAB ====== -->
+      @if (activeTab === 'airports') {
+        <div>
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-[#0f172a]">Airport List</h2>
+            <button (click)="openAddAirport()"
+              class="bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0f172a] font-bold py-2 px-4 rounded-lg text-sm transition-all">
+              + Add Airport
+            </button>
+          </div>
+
+          @if (airportSuccess) {
+            <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">✅ {{ airportSuccess }}</div>
+          }
+
+          <!-- Airport Form -->
+          @if (showAirportForm) {
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
+              <h3 class="font-bold text-[#0f172a] mb-4">{{ editingAirport ? 'Edit Airport' : 'New Airport' }}</h3>
+              @if (airportError) {
+                <p class="text-red-500 text-sm mb-3">⚠️ {{ airportError }}</p>
+              }
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">IATA Code *</label>
+                  <input [(ngModel)]="airportForm.airportCode" type="text" placeholder="LOS" maxlength="4"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24] uppercase" />
+                </div>
+                <div class="col-span-2">
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Airport Name *</label>
+                  <input [(ngModel)]="airportForm.airportName" type="text" placeholder="Full airport name"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">City *</label>
+                  <input [(ngModel)]="airportForm.cityName" type="text" placeholder="City name"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]" />
+                </div>
+              </div>
+              <div class="flex gap-3">
+                <button (click)="saveAirport()"
+                  class="bg-[#0f172a] text-white font-bold py-2 px-5 rounded-lg text-sm hover:bg-[#1e293b] transition-all">
+                  {{ editingAirport ? 'Update Airport' : 'Save Airport' }}
+                </button>
+                <button (click)="cancelAirportForm()"
+                  class="border border-gray-300 text-gray-600 font-semibold py-2 px-5 rounded-lg text-sm hover:bg-gray-50 transition-all">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- Airport Table -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-slate-50 border-b border-gray-200">
+                <tr>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Code</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Airport Name</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">City</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (airport of airports; track airport.airportId) {
+                  <tr class="border-b border-gray-100 hover:bg-slate-50 transition-colors">
+                    <td class="px-4 py-3">
+                      <span class="bg-[#0f172a] text-[#fbbf24] font-bold text-xs px-2 py-1 rounded-md">{{ airport.airportCode }}</span>
+                    </td>
+                    <td class="px-4 py-3 text-gray-800">{{ airport.airportName }}</td>
+                    <td class="px-4 py-3 text-gray-500">{{ airport.cityName }}</td>
+                    <td class="px-4 py-3">
+                      <div class="flex gap-2">
+                        <button (click)="openEditAirport(airport)"
+                          class="text-xs bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-md hover:bg-amber-100 transition-all">
+                          Edit
+                        </button>
+                        <button (click)="deleteAirport(airport.airportId)"
+                          class="text-xs bg-red-50 text-red-600 border border-red-200 px-3 py-1 rounded-md hover:bg-red-100 transition-all">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+      <!-- ====== FLIGHTS TAB ====== -->
+      @if (activeTab === 'flights') {
+        <div>
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold text-[#0f172a]">Flight List</h2>
+            <button (click)="openAddFlight()"
+              class="bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0f172a] font-bold py-2 px-4 rounded-lg text-sm transition-all">
+              + Add Flight
+            </button>
+          </div>
+
+          @if (flightSuccess) {
+            <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-sm text-green-700">✅ {{ flightSuccess }}</div>
+          }
+
+          <!-- Flight Form -->
+          @if (showFlightForm) {
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-6">
+              <h3 class="font-bold text-[#0f172a] mb-4">{{ editingFlight ? 'Edit Flight' : 'New Flight' }}</h3>
+              @if (flightError) {
+                <p class="text-red-500 text-sm mb-3">⚠️ {{ flightError }}</p>
+              }
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Flight Number *</label>
+                  <input [(ngModel)]="flightForm.flightNumber" type="text" placeholder="e.g. SL-901"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">From (Code) *</label>
+                  <select [(ngModel)]="flightForm.departureAirportCode" (ngModelChange)="onDepartureCodeChange()"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]">
+                    <option value="">Select airport</option>
+                    @for (a of airports; track a.airportId) {
+                      <option [value]="a.airportCode">{{ a.airportCode }} – {{ a.cityName }}</option>
+                    }
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">To (Code) *</label>
+                  <select [(ngModel)]="flightForm.arrivalAirportCode" (ngModelChange)="onArrivalCodeChange()"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]">
+                    <option value="">Select airport</option>
+                    @for (a of airports; track a.airportId) {
+                      <option [value]="a.airportCode">{{ a.airportCode }} – {{ a.cityName }}</option>
+                    }
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Departure Time *</label>
+                  <input [(ngModel)]="flightForm.departureTime" type="time"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Arrival Time *</label>
+                  <input [(ngModel)]="flightForm.arrivalTime" type="time"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Travel Date *</label>
+                  <input [(ngModel)]="flightForm.travelDate" type="date"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Price (₦) *</label>
+                  <input [(ngModel)]="flightForm.price" type="number" placeholder="0"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Total Seats *</label>
+                  <input [(ngModel)]="flightForm.totalSeats" type="number" placeholder="0"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]" />
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-gray-600 mb-1">Vendor / Airline</label>
+                  <input [(ngModel)]="flightForm.vendorName" type="text" placeholder="Skyline Air"
+                    class="w-full border border-gray-300 rounded-lg py-2 px-3 text-sm focus:outline-none focus:border-[#fbbf24]" />
+                </div>
+              </div>
+              <div class="flex gap-3">
+                <button (click)="saveFlight()"
+                  class="bg-[#0f172a] text-white font-bold py-2 px-5 rounded-lg text-sm hover:bg-[#1e293b] transition-all">
+                  {{ editingFlight ? 'Update Flight' : 'Save Flight' }}
+                </button>
+                <button (click)="cancelFlightForm()"
+                  class="border border-gray-300 text-gray-600 font-semibold py-2 px-5 rounded-lg text-sm hover:bg-gray-50 transition-all">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- Flight Table -->
+          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-x-auto">
+            <table class="w-full text-sm min-w-[700px]">
+              <thead class="bg-slate-50 border-b border-gray-200">
+                <tr>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Flight</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Route</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Date</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Times</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Price</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Seats</th>
+                  <th class="px-4 py-3 text-left font-semibold text-gray-600">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (flight of flights; track flight.flightId) {
+                  <tr class="border-b border-gray-100 hover:bg-slate-50 transition-colors">
+                    <td class="px-4 py-3 font-semibold text-[#0f172a]">{{ flight.flightNumber }}</td>
+                    <td class="px-4 py-3 text-gray-700">
+                      <span class="font-bold text-[#fbbf24] bg-[#0f172a] px-1.5 rounded text-xs">{{ flight.departureAirportCode }}</span>
+                      → 
+                      <span class="font-bold text-[#fbbf24] bg-[#0f172a] px-1.5 rounded text-xs">{{ flight.arrivalAirportCode }}</span>
+                    </td>
+                    <td class="px-4 py-3 text-gray-500">{{ flight.travelDate }}</td>
+                    <td class="px-4 py-3 text-gray-500">{{ flight.departureTime }} – {{ flight.arrivalTime }}</td>
+                    <td class="px-4 py-3 font-semibold text-gray-800">₦{{ flight.price | number }}</td>
+                    <td class="px-4 py-3 text-gray-500">{{ flight.totalSeats }}</td>
+                    <td class="px-4 py-3">
+                      <div class="flex gap-2">
+                        <button (click)="openEditFlight(flight)"
+                          class="text-xs bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-md hover:bg-amber-100 transition-all">
+                          Edit
+                        </button>
+                        <button (click)="deleteFlight(flight.flightId)"
+                          class="text-xs bg-red-50 text-red-600 border border-red-200 px-3 py-1 rounded-md hover:bg-red-100 transition-all">
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      }
+
+    </div>
+  }
+</main>

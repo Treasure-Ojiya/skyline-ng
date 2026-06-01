@@ -1,0 +1,38 @@
+<section class="px-8 py-10 bg-white">
+  <swiper-container
+    [spaceBetween]="spaceBetween"
+    [centeredSlides]="false"
+    [grabCursor]="true"
+    [loop]="true"
+    [autoplay]="{ delay: 3000, disableOnInteraction: false }"
+    [pagination]="{ clickable: true }"
+    [breakpoints]="{
+      '0': { slidesPerView: 1 },
+      '768': { slidesPerView: 3 },
+      '1200': { slidesPerView: 5 }
+    }"
+    (swiperprogress)="onProgress($any($event))"
+    (swiperslidechange)="onSlideChange()"
+    class="rounded-2xl"
+  >
+    @for (dest of destinations; track dest.name) {
+    <swiper-slide class="h-full flex items-center justify-center">
+      <div
+        class="relative overflow-hidden rounded-2xl shadow-lg group w-full max-w-sm"
+      >
+        <img
+          [src]="dest.image"
+          [alt]="dest.name"
+          class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+          loading="lazy"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4"
+        >
+          <h3 class="text-white text-lg font-semibold">{{ dest.name }}</h3>
+        </div>
+      </div>
+    </swiper-slide>
+    }
+  </swiper-container>
+</section>

@@ -1,0 +1,95 @@
+<div
+  class="navbar-container fixed top-0 left-0 w-full z-50 flex justify-between items-center py-2 px-6 transition-all duration-500 ease-in-out backdrop-blur-sm"
+  [ngClass]="{
+    'bg-[#0f172a]/90 shadow-md': scrolled || !isHomePage,
+    'bg-transparent': isHomePage && !scrolled,
+  }"
+>
+  <!-- Logo -->
+  <div>
+    <a routerLink="/application/home">
+      <h2 class="text-white font-bold text-3xl">Skyline</h2>
+    </a>
+  </div>
+
+  <!-- Hamburger (Mobile Only) -->
+  <button class="text-white md:hidden text-3xl focus:outline-none" (click)="toggleMenu()">
+    <i class="fas" [ngClass]="{ 'fa-bars': !menuOpen, 'fa-times': menuOpen }"></i>
+  </button>
+
+  <!-- Navigation Links -->
+  <nav
+    class="navbar md:flex md:items-center md:space-x-4 md:static absolute top-full left-0 w-full md:w-auto bg-[#0f172a]/95 md:bg-transparent flex flex-col md:flex-row transition-all duration-300 ease-in-out"
+    [ngClass]="{ 'hidden md:flex': !menuOpen, flex: menuOpen }"
+  >
+    <a
+      routerLink="/application/home"
+      routerLinkActive="text-[#fbbf24]"
+      class="block md:inline-block p-4 font-semibold text-white hover:text-[#fbbf24] transition-all duration-300"
+      (click)="closeMenu()"
+      >Home</a
+    >
+
+    <a
+      routerLink="/application/airports"
+      routerLinkActive="text-[#fbbf24]"
+      class="block md:inline-block p-4 font-semibold text-white hover:text-[#fbbf24] transition-all duration-300"
+      (click)="closeMenu()"
+      >Airports</a
+    >
+
+    <a
+      routerLink="/application/flight"
+      routerLinkActive="text-[#fbbf24]"
+      class="block md:inline-block p-4 font-semibold text-white hover:text-[#fbbf24] transition-all duration-300"
+      (click)="closeMenu()"
+      >Flights</a
+    >
+
+    <a
+      routerLink="/application/about"
+      routerLinkActive="text-[#fbbf24]"
+      class="block md:inline-block p-4 font-semibold text-white hover:text-[#fbbf24] transition-all duration-300"
+      (click)="closeMenu()"
+      >About</a
+    >
+
+    <a
+      routerLink="/application/contact"
+      routerLinkActive="text-[#fbbf24]"
+      class="block md:inline-block p-4 font-semibold text-white hover:text-[#fbbf24] transition-all duration-300"
+      (click)="closeMenu()"
+      >Contact</a
+    >
+
+    <a
+      routerLink="/application/admin"
+      routerLinkActive="text-[#fbbf24]"
+      class="block md:inline-block p-4 font-semibold text-white hover:text-[#fbbf24] transition-all duration-300"
+      (click)="closeMenu()"
+      >Admin</a
+    >
+
+    <!-- Mobile Login / Logout -->
+    <div
+      class="login text-[#0f172a] bg-[#fbbf24] hover:bg-[#fbbf249f] p-2 m-3 rounded-lg font-semibold block md:hidden text-center"
+    >
+      @if (!isLoggedIn) {
+        <a (click)="goToAuth(); closeMenu()">Login / Register</a>
+      } @else {
+        <button (click)="logout(); closeMenu()">Logout</button>
+      }
+    </div>
+  </nav>
+
+  <!-- Desktop Login / Logout -->
+  <div
+    class="login text-[#0f172a] bg-[#fbbf24] hover:bg-[#fbbf249f] p-2 rounded-lg font-semibold hidden md:block"
+  >
+    @if (!isLoggedIn) {
+      <a (click)="goToAuth()" class="cursor-pointer">Login / Register</a>
+    } @else {
+      <button (click)="logout()">Logout</button>
+    }
+  </div>
+</div>

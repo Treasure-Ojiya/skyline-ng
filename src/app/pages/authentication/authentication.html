@@ -1,0 +1,561 @@
+<!-- <main class="min-h-screen flex">
+  <div
+    class="hidden md:flex md:w-1/2 bg-[#0f172a] flex-col justify-between p-12 relative overflow-hidden"
+  >
+    <div class="absolute top-0 left-0 w-full h-full opacity-10">
+      <div class="absolute top-[-80px] left-[-80px] w-96 h-96 rounded-full bg-[#fbbf24]"></div>
+      <div class="absolute bottom-[-60px] right-[-60px] w-72 h-72 rounded-full bg-[#059669]"></div>
+    </div>
+
+    <div class="relative z-10">
+      <h1 class="text-4xl font-bold text-white">Skyline</h1>
+      <p class="text-gray-400 mt-2 text-sm">Take to the skies with us.</p>
+    </div>
+
+    <div class="relative z-10">
+      <h2 class="text-3xl font-bold text-white leading-snug mb-4">
+        Let us be part of<br />your journey —<br />
+        <span class="text-[#fbbf24]">one flight at a time!</span>
+      </h2>
+      <p class="text-gray-400 text-sm leading-relaxed max-w-xs">
+        Book flights across Nigeria and beyond. Fast, simple, and always reliable.
+      </p>
+
+      <div class="flex gap-8 mt-10">
+        <div>
+          <p class="text-2xl font-bold text-[#fbbf24]">15+</p>
+          <p class="text-xs text-gray-500 mt-1">Airports</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-[#fbbf24]">8+</p>
+          <p class="text-xs text-gray-500 mt-1">Active Flights</p>
+        </div>
+        <div>
+          <p class="text-2xl font-bold text-[#fbbf24]">100%</p>
+          <p class="text-xs text-gray-500 mt-1">Uptime</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative z-10">
+      <p class="text-[#fbbf24]">Built by Treasure Ojiya</p>
+      <p class="text-gray-600 text-xs">&copy; 2025 Skyline. All rights reserved.</p>
+    </div>
+  </div>
+
+  <div class="w-full md:w-1/2 flex flex-col justify-center items-center bg-slate-50 px-6 py-12">
+    <div class="md:hidden text-center mb-8">
+      <h1 class="text-3xl font-bold text-[#0f172a]">Skyline</h1>
+      <p class="text-sm text-gray-500 mt-1">Take to the skies with us.</p>
+    </div>
+
+    <div class="w-full max-w-md">
+      <div class="mb-8">
+        @if (isLogin) {
+          <h2 class="text-2xl font-bold text-[#0f172a]">Welcome back</h2>
+          <p class="text-gray-500 text-sm mt-1">Sign in to your Skyline account</p>
+        } @else {
+          <h2 class="text-2xl font-bold text-[#0f172a]">Create an account</h2>
+          <p class="text-gray-500 text-sm mt-1">Join Skyline and start booking flights</p>
+        }
+      </div>
+
+      <div class="flex bg-white rounded-xl p-1 mb-8 shadow-sm border border-gray-200">
+        <button
+          (click)="showLoginForm()"
+          [ngClass]="
+            isLogin ? 'bg-[#0f172a] text-white shadow' : 'text-gray-400 hover:text-gray-600'
+          "
+          class="w-1/2 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
+        >
+          Sign In
+        </button>
+        <button
+          (click)="showRegisterForm()"
+          [ngClass]="
+            !isLogin ? 'bg-[#0f172a] text-white shadow' : 'text-gray-400 hover:text-gray-600'
+          "
+          class="w-1/2 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
+        >
+          Register
+        </button>
+      </div>
+
+      @if (errorMessage) {
+        <div class="mb-5 p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2">
+          <span class="text-red-500 mt-0.5">⚠️</span>
+          <p class="text-sm text-red-700">{{ errorMessage }}</p>
+        </div>
+      }
+
+      @if (isLogin) {
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="flex flex-col gap-4">
+          <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1.5">Email address</label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="you@example.com"
+              class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+            />
+            @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
+              <small class="text-red-500 mt-1 block">
+                @if (loginForm.get('email')?.errors?.['required']) {
+                  Email is required.
+                }
+                @if (loginForm.get('email')?.errors?.['email']) {
+                  Enter a valid email.
+                }
+              </small>
+            }
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1.5">Password</label>
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="••••••••"
+              class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+            />
+            @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
+              <small class="text-red-500 mt-1 block">
+                @if (loginForm.get('password')?.errors?.['required']) {
+                  Password is required.
+                }
+                @if (loginForm.get('password')?.errors?.['minlength']) {
+                  At least 6 characters.
+                }
+              </small>
+            }
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="loader"
+            class="w-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0f172a] font-bold py-3 rounded-xl transition-all duration-200 disabled:opacity-60 mt-2"
+          >
+            {{ loader ? 'Signing in...' : 'Sign In →' }}
+          </button>
+
+          <p class="text-center text-sm text-gray-400 mt-1">
+            No account?
+            <button
+              type="button"
+              (click)="showRegisterForm()"
+              class="text-[#0f172a] font-bold hover:underline"
+            >
+              Register here
+            </button>
+          </p>
+        </form>
+      }
+
+      @else {
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="flex flex-col gap-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1.5">Full Name</label>
+              <input
+                type="text"
+                formControlName="name"
+                placeholder="John Doe"
+                class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+              />
+              @if (registerForm.get('name')?.touched && registerForm.get('name')?.invalid) {
+                <small class="text-red-500 mt-1 block">Name is required.</small>
+              }
+            </div>
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1.5">Mobile</label>
+              <input
+                type="text"
+                formControlName="mobileNo"
+                placeholder="+234..."
+                class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+              />
+              @if (registerForm.get('mobileNo')?.touched && registerForm.get('mobileNo')?.invalid) {
+                <small class="text-red-500 mt-1 block">
+                  @if (registerForm.get('mobileNo')?.errors?.['required']) {
+                    Required.
+                  }
+                  @if (registerForm.get('mobileNo')?.errors?.['pattern']) {
+                    Invalid number.
+                  }
+                </small>
+              }
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1.5">Email address</label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="you@example.com"
+              class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+            />
+            @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+              <small class="text-red-500 mt-1 block">
+                @if (registerForm.get('email')?.errors?.['required']) {
+                  Email is required.
+                }
+                @if (registerForm.get('email')?.errors?.['email']) {
+                  Enter a valid email.
+                }
+              </small>
+            }
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1.5">City</label>
+              <input
+                type="text"
+                formControlName="city"
+                placeholder="Lagos"
+                class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+              />
+              @if (registerForm.get('city')?.touched && registerForm.get('city')?.invalid) {
+                <small class="text-red-500 mt-1 block">City is required.</small>
+              }
+            </div>
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1.5">Address</label>
+              <input
+                type="text"
+                formControlName="address"
+                placeholder="123 Street"
+                class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+              />
+              @if (registerForm.get('address')?.touched && registerForm.get('address')?.invalid) {
+                <small class="text-red-500 mt-1 block">Address is required.</small>
+              }
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1.5">Password</label>
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="Min. 6 characters"
+              class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+            />
+            @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+              <small class="text-red-500 mt-1 block">
+                @if (registerForm.get('password')?.errors?.['required']) {
+                  Password is required.
+                }
+                @if (registerForm.get('password')?.errors?.['minlength']) {
+                  At least 6 characters.
+                }
+              </small>
+            }
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="loader"
+            class="w-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0f172a] font-bold py-3 rounded-xl transition-all duration-200 disabled:opacity-60 mt-2"
+          >
+            {{ loader ? 'Creating account...' : 'Create Account →' }}
+          </button>
+
+          <p class="text-center text-sm text-gray-400 mt-1">
+            Already have an account?
+            <button
+              type="button"
+              (click)="showLoginForm()"
+              class="text-[#0f172a] font-bold hover:underline"
+            >
+              Sign in
+            </button>
+          </p>
+        </form>
+      }
+    </div>
+  </div>
+</main> -->
+
+<main class="min-h-screen flex">
+  <!-- LEFT PANEL — branding -->
+  <div
+    class="hidden md:flex md:w-1/2 bg-[#0f172a] flex-col justify-between py-6 px-12 relative overflow-hidden"
+  >
+    <!-- Logo -->
+    <div class="relative z-10">
+      <h1 class="text-4xl font-bold text-white">Skyline</h1>
+      <p class="text-gray-400 mt-2 text-sm">Take to the skies with us.</p>
+    </div>
+
+    <!-- Image placeholder — replace src with your chosen image -->
+    <div class="relative z-10 rounded-2xl overflow-hidden">
+      <img
+        src="assets/imgs/auth-img.png"
+        alt="Skyline flight"
+        class="w-full h-64 object-cover opacity-80"
+      />
+      <!-- Optional dim overlay so text stays readable if you add any -->
+      <div class="absolute inset-0 bg-[#0f172a]/20 rounded-2xl"></div>
+    </div>
+
+    <!-- Center content -->
+    <div class="relative z-10">
+      <h2 class="text-3xl font-bold text-white leading-snug mb-4">
+        Let us be part of<br />your journey —<br />
+        <span class="text-[#fbbf24]">one flight at a time!</span>
+      </h2>
+      <p class="text-gray-400 text-sm leading-relaxed max-w-xs">
+        Book flights across Nigeria and beyond. Fast, simple, and always reliable.
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="relative z-10">
+      <p class="text-[#fbbf24] text-sm font-semibold">Built by Treasure Ojiya</p>
+      <p class="text-gray-600 text-xs mt-1">&copy; 2025 Skyline. All rights reserved.</p>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — form -->
+  <div class="w-full md:w-1/2 flex flex-col justify-center items-center bg-slate-50 px-6 py-12">
+    <!-- Mobile logo -->
+    <div class="md:hidden text-center mb-8">
+      <h1 class="text-3xl font-bold text-[#0f172a]">Skyline</h1>
+      <p class="text-sm text-gray-500 mt-1">Take to the skies with us.</p>
+    </div>
+
+    <div class="w-full max-w-md">
+      <!-- Heading -->
+      <div class="mb-8">
+        @if (isLogin) {
+          <h2 class="text-2xl font-bold text-[#0f172a]">Welcome back</h2>
+          <p class="text-gray-500 text-sm mt-1">Sign in to your Skyline account</p>
+        } @else {
+          <h2 class="text-2xl font-bold text-[#0f172a]">Create an account</h2>
+          <p class="text-gray-500 text-sm mt-1">Join Skyline and start booking flights</p>
+        }
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex bg-white rounded-xl p-1 mb-8 shadow-sm border border-gray-200">
+        <button
+          (click)="showLoginForm()"
+          [ngClass]="
+            isLogin ? 'bg-[#0f172a] text-white shadow' : 'text-gray-400 hover:text-gray-600'
+          "
+          class="w-1/2 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
+        >
+          Sign In
+        </button>
+        <button
+          (click)="showRegisterForm()"
+          [ngClass]="
+            !isLogin ? 'bg-[#0f172a] text-white shadow' : 'text-gray-400 hover:text-gray-600'
+          "
+          class="w-1/2 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200"
+        >
+          Register
+        </button>
+      </div>
+
+      <!-- Error -->
+      @if (errorMessage) {
+        <div class="mb-5 p-3 bg-red-50 border border-red-200 rounded-xl flex items-start gap-2">
+          <span class="text-red-500 mt-0.5">⚠️</span>
+          <p class="text-sm text-red-700">{{ errorMessage }}</p>
+        </div>
+      }
+
+      <!-- LOGIN FORM -->
+      @if (isLogin) {
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="flex flex-col gap-4">
+          <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1.5">Email address</label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="you@example.com"
+              class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+            />
+            @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
+              <small class="text-red-500 mt-1 block">
+                @if (loginForm.get('email')?.errors?.['required']) {
+                  Email is required.
+                }
+                @if (loginForm.get('email')?.errors?.['email']) {
+                  Enter a valid email.
+                }
+              </small>
+            }
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1.5">Password</label>
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="••••••••"
+              class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+            />
+            @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
+              <small class="text-red-500 mt-1 block">
+                @if (loginForm.get('password')?.errors?.['required']) {
+                  Password is required.
+                }
+                @if (loginForm.get('password')?.errors?.['minlength']) {
+                  At least 6 characters.
+                }
+              </small>
+            }
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="loader"
+            class="w-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0f172a] font-bold py-3 rounded-xl transition-all duration-200 disabled:opacity-60 mt-2"
+          >
+            {{ loader ? 'Signing in...' : 'Sign In →' }}
+          </button>
+
+          <p class="text-center text-sm text-gray-400 mt-1">
+            No account?
+            <button
+              type="button"
+              (click)="showRegisterForm()"
+              class="text-[#0f172a] font-bold hover:underline"
+            >
+              Register here
+            </button>
+          </p>
+        </form>
+      }
+
+      <!-- REGISTER FORM -->
+      @else {
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="flex flex-col gap-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1.5">Full Name</label>
+              <input
+                type="text"
+                formControlName="name"
+                placeholder="John Doe"
+                class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+              />
+              @if (registerForm.get('name')?.touched && registerForm.get('name')?.invalid) {
+                <small class="text-red-500 mt-1 block">Name is required.</small>
+              }
+            </div>
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1.5">Mobile</label>
+              <input
+                type="text"
+                formControlName="mobileNo"
+                placeholder="+234..."
+                class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+              />
+              @if (registerForm.get('mobileNo')?.touched && registerForm.get('mobileNo')?.invalid) {
+                <small class="text-red-500 mt-1 block">
+                  @if (registerForm.get('mobileNo')?.errors?.['required']) {
+                    Required.
+                  }
+                  @if (registerForm.get('mobileNo')?.errors?.['pattern']) {
+                    Invalid number.
+                  }
+                </small>
+              }
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1.5">Email address</label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="you@example.com"
+              class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+            />
+            @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+              <small class="text-red-500 mt-1 block">
+                @if (registerForm.get('email')?.errors?.['required']) {
+                  Email is required.
+                }
+                @if (registerForm.get('email')?.errors?.['email']) {
+                  Enter a valid email.
+                }
+              </small>
+            }
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1.5">City</label>
+              <input
+                type="text"
+                formControlName="city"
+                placeholder="Lagos"
+                class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+              />
+              @if (registerForm.get('city')?.touched && registerForm.get('city')?.invalid) {
+                <small class="text-red-500 mt-1 block">City is required.</small>
+              }
+            </div>
+            <div>
+              <label class="block text-gray-700 text-sm font-semibold mb-1.5">Address</label>
+              <input
+                type="text"
+                formControlName="address"
+                placeholder="123 Street"
+                class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+              />
+              @if (registerForm.get('address')?.touched && registerForm.get('address')?.invalid) {
+                <small class="text-red-500 mt-1 block">Address is required.</small>
+              }
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-gray-700 text-sm font-semibold mb-1.5">Password</label>
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="Min. 6 characters"
+              class="w-full bg-white border border-gray-200 rounded-xl py-3 px-4 text-sm focus:outline-none focus:border-[#fbbf24] focus:ring-2 focus:ring-[#fbbf2420] transition-all"
+            />
+            @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+              <small class="text-red-500 mt-1 block">
+                @if (registerForm.get('password')?.errors?.['required']) {
+                  Password is required.
+                }
+                @if (registerForm.get('password')?.errors?.['minlength']) {
+                  At least 6 characters.
+                }
+              </small>
+            }
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="loader"
+            class="w-full bg-[#fbbf24] hover:bg-[#f59e0b] text-[#0f172a] font-bold py-3 rounded-xl transition-all duration-200 disabled:opacity-60 mt-2"
+          >
+            {{ loader ? 'Creating account...' : 'Create Account →' }}
+          </button>
+
+          <p class="text-center text-sm text-gray-400 mt-1">
+            Already have an account?
+            <button
+              type="button"
+              (click)="showLoginForm()"
+              class="text-[#0f172a] font-bold hover:underline"
+            >
+              Sign in
+            </button>
+          </p>
+        </form>
+      }
+    </div>
+  </div>
+</main>
