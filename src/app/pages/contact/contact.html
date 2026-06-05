@@ -20,11 +20,6 @@
         <div
           class="flex items-start gap-4 bg-white rounded-2xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all"
         >
-          <div
-            class="w-12 h-12 bg-[#0f172a] rounded-xl flex items-center justify-center text-[#fbbf24] text-xl flex-shrink-0"
-          >
-            {{ info.icon }}
-          </div>
           <div>
             <p class="font-semibold text-[#0f172a]">{{ info.label }}</p>
             <p class="text-gray-500 text-sm">{{ info.value }}</p>
@@ -39,7 +34,7 @@
 
       @if (submitted) {
         <div class="text-center py-10">
-          <div class="text-5xl mb-4">✅</div>
+          <div class="text-5xl mb-4"></div>
           <h3 class="text-lg font-bold text-[#0f172a] mb-2">Message Sent!</h3>
           <p class="text-gray-500 text-sm">
             Thanks for reaching out. We'll get back to you shortly.
